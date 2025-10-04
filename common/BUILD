@@ -32,8 +32,32 @@ cc_library(
     deps=[":point", ":line_segment"],
 )
 
+cc_library(
+    name="plane",
+    hdrs=["plane.hh"],
+    deps=[":point"],
+)
+
+cc_library(
+    name="line_segment_plane_intersection",
+    hdrs=["line_segment_plane_intersection.hh"],
+    deps=[":point", ":line_segment", ":plane"],
+)
+
 cc_test(
     name="line_segment_intersection_test",
     srcs=["line_segment_intersection_test.cc"],
     deps=[":line_segment_intersection"],
+)
+
+cc_test(
+    name="plane_test",
+    srcs=["plane_test.cc"],
+    deps=[":plane"],
+)
+
+cc_test(
+    name="line_segment_plane_intersection_test",
+    srcs=["line_segment_plane_intersection_test.cc"],
+    deps=[":line_segment_plane_intersection"],
 )

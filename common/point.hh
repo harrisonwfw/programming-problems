@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include <array>
+
 namespace geometry {
 
 template <typename T, size_t Dim>
