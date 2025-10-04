@@ -4,24 +4,28 @@
 
 namespace geometry {
 
-template <size_t Dim, typename T>
+template <typename T, size_t Dim>
 class Point {
 public:
   Point(): coordinates_{} {};
 
   template <typename... Args>
-    Point(Args... args): coordintes_{static_cast<T>(args)} {
-      static_assert(sizeof(Args) == Dim, "Incorrect number of initializers for Point");
+    Point(Args... args): coordinates_{static_cast<T>(args)...} {
+      static_assert(sizeof...(Args) == Dim, "Incorrect number of initializers for Point");
     }
 
-  const T x() const { return coordinates_.at(0) };
-  const T y() const { return coordinates_.at(1) };
+  const T x() const { return coordinates_.at(0); }
+  const T y() const { return coordinates_.at(1); }
 
-  if constexpr (Dim >= 3) const T& z() const { return coordinates_.at(2) };
+  const T& z() const { 
+    static_assert(Dim >= 3, "z() only available for 3D points");
+    return coordinates_.at(2); 
+  }
 
-  T& operator[](size_t index) { return coordinates[index] };
+  T& operator[](size_t index) { return coordinates_[index]; }
+  const T& operator[](size_t index) const { return coordinates_[index]; }
 
-  constexpr size_t dimension() { return Dim };
+  constexpr size_t dimension() const { return Dim; }
 
 private:
   std::array<T, Dim> coordinates_;
@@ -33,7 +37,7 @@ private:
 template <typename T, size_t Dim>
 bool operator==(const Point<T, Dim>& lhs, const Point<T, Dim>& rhs) {
     // std::array already has a component-wise operator==
-    return lhs.coordinates == rhs.coordinates;
+    return lhs.coordinates_ == rhs.coordinates_;
 }
 
 // Inequality comparison (!=)
